@@ -15,7 +15,7 @@ logging.basicConfig(
 
 #client = RIPEClient(cacheLocation='./cache/ripe', logging=logging)
 
-client = NetScienceClient(base_url='http://localhost:7001', username='luizsoliveira@gmail.com', password='123456', logging=False)
+client = NetScienceClient(base_url='http://postgrest:3000', username='luizsoliveira@gmail.com', password='123456', logging=False)
 counter=0
 while True:
     tasks = client.catch_task('BGPAnomaly')
