@@ -26,19 +26,47 @@ while True:
         print(" ✅ New task found.")
         task_working_dir = f"/var/tasks/{task['key']}"
 
-        result = subprocess.run(
-            [sys.executable, "/usr/src/app/task_runner.py"],
-             capture_output=True,
-             cwd=task_working_dir,
-             text=True
-)
-        print("stdout:")
-        print(result.stdout)
-        print("stderr:")
-        print(result.stderr)
+        stdout_path = f"{task_working_dir}/stdout.log"
+        print(f" ✅ Writing output in: {stdout_path}")
 
-    else:
-        print(f" 🕣  No pending tasks found. Checking again in {INTERVAL_DURING_TASK_CATCHING} seconds.")
+        #cmd = ["python3", "/usr/src/app/task_runner.py", ">", "stdout.log"]
+        #p = subprocess.Popen(cmd, cwd=task_working_dir)
+        
+
+        # Executing python script without stdout buffer
+        command = "python3 -u /usr/src/app/task_runner.py"
+
+        # Specify the file where you want to redirect the output
+        output_file = f"{task_working_dir}/stdout.log"
+
+        # Open the file in append mode (so it doesn't overwrite previous content)
+        with open(output_file, "a") as file:
+            # Create a subprocess with stdout redirected to a file and tee'd to the console
+            process = subprocess.Popen(
+                f"{command} | tee -a {output_file}",
+                shell=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.STDOUT,
+                universal_newlines=True,
+                cwd=task_working_dir
+            )
+
+            # Read and print the output in real-time
+            while True:
+                line = process.stdout.readline()
+                if not line:
+                    break
+                #print(line, end="")
+
+        # Wait for the subprocess to complete
+        process.wait()
+
+        # Optionally, you can check the return code of the subprocess
+        return_code = process.returncode
+        print(f"Subprocess exited with return code {return_code}")
+
+    #else:
+    #    print(f" 🕣  No pending tasks found. Checking again in {INTERVAL_DURING_TASK_CATCHING} seconds.")
     
     time.sleep(INTERVAL_DURING_TASK_CATCHING)
     
