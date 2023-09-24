@@ -1,6 +1,7 @@
 import json
 import requests
 import logging
+import os
 
 # These two lines enable debugging at httplib level (requests->urllib3->http.client)
 # You will see the REQUEST, including HEADERS and DATA, and RESPONSE with HEADERS but without DATA.
@@ -87,5 +88,32 @@ class NetScienceClient:
         if (r.status_code != 200):
             raise Exception(f"Some problem occurred during the task catching. Code: {r.status_code}. Message: {response_data['message']}.")
 
-        return response_data
+        if (len(response_data) > 0):
+            task = response_data[0]
+            self.initialize_dir(task['key'])
+            self.write_input_file(task)
+            return task
+        else:
+            return False    
+    
+    def initialize_dir(self, taskId):
+        path = f"/var/tasks/{taskId}"
+        if not os.path.exists(path):
+            os.makedirs(path)
+
+    def write_input_file(self, task):
+        path = f"/var/tasks/{task['key']}/task.json"
+        try:
+            with open(path, "w") as outfile:
+                outfile.write(json.dumps(task, indent=2))
+            return True
+        except IOError:
+            raise Exception("Failure while writing file: " + path)
+
+
+    def print_parameters(self,parameters):
+        print("  → {:<30} {:<30}".format('Parameter','Value'))
+        for param, value in parameters.items():
+            #print(param.rjust(15) + value.rjust(15))
+            print("  → {:<30} {:<30}".format(param, value))
         
