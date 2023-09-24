@@ -2,6 +2,7 @@ import json
 import requests
 import logging
 import os
+import utils
 
 # These two lines enable debugging at httplib level (requests->urllib3->http.client)
 # You will see the REQUEST, including HEADERS and DATA, and RESPONSE with HEADERS but without DATA.
@@ -91,6 +92,8 @@ class NetScienceClient:
         if (len(response_data) > 0):
             task = response_data[0]
             self.initialize_dir(task['key'])
+            self.reset_task_json(task['key'])
+            self.reset_stdout(task['key'])
             self.write_input_file(task)
             return task
         else:
@@ -100,6 +103,20 @@ class NetScienceClient:
         path = f"/var/tasks/{taskId}"
         if not os.path.exists(path):
             os.makedirs(path)
+        else:
+            utils.rm_folder_content(path)
+    
+    def reset_task_json(self, taskId):
+        path = f"/var/tasks/{taskId}/task.json"
+        if os.path.exists(path):
+            os.remove(path)
+    
+    def reset_stdout(self, taskId):
+        path = f"/var/tasks/{taskId}/stdout.log"
+        if os.path.exists(path):
+            os.remove(path)
+        
+        
 
     def write_input_file(self, task):
         path = f"/var/tasks/{task['key']}/task.json"
@@ -109,11 +126,4 @@ class NetScienceClient:
             return True
         except IOError:
             raise Exception("Failure while writing file: " + path)
-
-
-    def print_parameters(self,parameters):
-        print("  → {:<30} {:<30}".format('Parameter','Value'))
-        for param, value in parameters.items():
-            #print(param.rjust(15) + value.rjust(15))
-            print("  → {:<30} {:<30}".format(param, value))
         
