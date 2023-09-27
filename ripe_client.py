@@ -161,7 +161,7 @@ class RIPEClient:
                     raise Exception('Failure when downloading the file: ' + url)
                 
             else:
-                self.log_info('Download prevented because the file was found in cache: ' + url)
+                self.log_info('Download prevented because the file was found in cache: ' + self.filename_from_url(url))
                 return filePath
         else:
             raise Exception('The parameter ripe_datetime need to be a datetime type.')
