@@ -28,10 +28,12 @@ anomalous_datetime_start = datetime.strptime(p['anomalous_datetime_start'], date
 anomalous_datetime_end = datetime.strptime(p['anomalous_datetime_end'], date_format) 
 data_partition_training = p['data_partition_training'] 
 data_partition_testing = p['data_partition_testing'] 
-rnn_length = p['rnn_length'] 
+rnn_length = p['rnn_length']
 
+cache = '/var/cache/ripe' if p['cache'] == 'activated' else False
+debug = True if p['debug'] == 'activated' else False
 
-client = RIPEClient(cacheLocation='/var/cache/ripe', logging=False, debug=True)
+client = RIPEClient(cacheLocation=cache, logging=False, debug=debug)
 #client = RIPEClient()
 
 files = client.download_updates_interval_files(datetime_start, datetime_end)
