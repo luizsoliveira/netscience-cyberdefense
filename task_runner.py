@@ -6,10 +6,13 @@ from datetime import datetime
 
 print(f" 📂 Starting task on CWD: {os.getcwd()}")
 
+today = datetime.today()
+print(f" 🕣 Starting time: {today}")
+
 file = open('task.json')
 task = json.load(file)
 
-print(f" 🔑 Task key: {task['key']}")
+print(f" 🔑 Task key: {task['id']}")
 print(f" ⚙️ Task parameters:")
 utils.print_task_parameters(task)
 

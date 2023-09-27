@@ -91,9 +91,9 @@ class NetScienceClient:
 
         if (len(response_data) > 0):
             task = response_data[0]
-            self.initialize_dir(task['key'])
-            self.reset_task_json(task['key'])
-            self.reset_stdout(task['key'])
+            self.initialize_dir(task['id'])
+            self.reset_task_json(task['id'])
+            self.reset_stdout(task['id'])
             self.write_input_file(task)
             return task
         else:
@@ -119,7 +119,7 @@ class NetScienceClient:
         
 
     def write_input_file(self, task):
-        path = f"/var/tasks/{task['key']}/task.json"
+        path = f"/var/tasks/{task['id']}/task.json"
         try:
             with open(path, "w") as outfile:
                 outfile.write(json.dumps(task, indent=2))

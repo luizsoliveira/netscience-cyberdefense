@@ -24,7 +24,7 @@ while True:
     
     if (task):
         print(" ✅ New task found.")
-        task_working_dir = f"/var/tasks/{task['key']}"
+        task_working_dir = f"/var/tasks/{task['id']}"
 
         stdout_path = f"{task_working_dir}/stdout.log"
         print(f" ✅ Writing output in: {stdout_path}")
@@ -39,7 +39,7 @@ while True:
         # Specify the file where you want to redirect the output
         output_file = f"{task_working_dir}/stdout.log"
 
-        # Open the file in write mode
+        # Open the file in write mode (overwriting previous content if exists)
         with open(output_file, "w") as file:
             # Create a subprocess with stdout redirected to a file and tee'd to the console
             process = subprocess.Popen(
