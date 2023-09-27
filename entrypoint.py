@@ -39,8 +39,8 @@ while True:
         # Specify the file where you want to redirect the output
         output_file = f"{task_working_dir}/stdout.log"
 
-        # Open the file in append mode (so it doesn't overwrite previous content)
-        with open(output_file, "a") as file:
+        # Open the file in write mode
+        with open(output_file, "w") as file:
             # Create a subprocess with stdout redirected to a file and tee'd to the console
             process = subprocess.Popen(
                 f"{command} | tee -a {output_file}",
@@ -56,7 +56,7 @@ while True:
                 line = process.stdout.readline()
                 if not line:
                     break
-                #print(line, end="")
+                print(line, end="")
 
         # Wait for the subprocess to complete
         process.wait()
