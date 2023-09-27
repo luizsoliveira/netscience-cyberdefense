@@ -64,6 +64,9 @@ while True:
         # Optionally, you can check the return code of the subprocess
         return_code = process.returncode
         print(f"Subprocess exited with return code {return_code}")
+        updated = client.update_task_finished(task)
+        if updated:
+            print(f"Task {updated['id']} finished_at attribute updated {updated['finished_at']}")
 
     #else:
     #    print(f" 🕣  No pending tasks found. Checking again in {INTERVAL_DURING_TASK_CATCHING} seconds.")

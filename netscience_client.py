@@ -24,7 +24,8 @@ import utils
 class NetScienceClient:
 
     API_AUTH_ENDPOINT = 'rpc/login'
-    API_TASK_ENDPOINT = 'rpc/catch_task'
+    API_CATCH_TASK_ENDPOINT = 'rpc/catch_task'
+    API_TASK_ENDPOINT = 'tasks'
 
     def __init__(self,
                  base_url,
@@ -83,7 +84,7 @@ class NetScienceClient:
         }
 
         # sending post request and saving response as response object
-        r = requests.post(url=f"{self.base_url}/{self.API_TASK_ENDPOINT}", data=data)
+        r = requests.post(url=f"{self.base_url}/{self.API_CATCH_TASK_ENDPOINT}", data=data)
         response_data = json.loads(r.text)
 
         if (r.status_code != 200):
@@ -97,7 +98,35 @@ class NetScienceClient:
             self.write_input_file(task)
             return task
         else:
-            return False    
+            return False
+    
+    def update_task_finished(self, task):
+
+        self.check_authentication()
+
+        headers= {
+            'accept': 'application/json',
+            'Prefer': 'return=representation',
+            'Content-Type': 'application/json'
+        }
+
+        data = {
+        "finished_at": "now()"
+        }
+
+        # sending post request and saving response as response object
+        r = requests.patch(url=f"{self.base_url}/{self.API_TASK_ENDPOINT}?id=eq.{task['id']}", json=data, headers=headers)
+        response_data = json.loads(r.text)
+
+        if (r.status_code != 200):
+            raise Exception(f"Some problem occurred during updating the task. Code: {r.status_code}. Message: {response_data['message']}.")
+            
+        if (len(response_data) > 0):
+            task = response_data[0]
+            return task
+        else:
+            return False
+        
     
     def initialize_dir(self, taskId):
         path = f"/var/tasks/{taskId}"
