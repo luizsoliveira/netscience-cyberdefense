@@ -29,10 +29,6 @@ while True:
         stdout_path = f"{task_working_dir}/stdout.log"
         print(f" ✅ Writing output in: {stdout_path}")
 
-        #cmd = ["python3", "/usr/src/app/task_runner.py", ">", "stdout.log"]
-        #p = subprocess.Popen(cmd, cwd=task_working_dir)
-        
-
         # Executing python script without stdout buffer
         command = "python3 -u /usr/src/app/task_runner.py"
 
@@ -46,6 +42,7 @@ while True:
                 f"{command} | tee -a {output_file}",
                 shell=True,
                 stdout=subprocess.PIPE,
+                # stderr=subprocess.PIPE,
                 stderr=subprocess.STDOUT,
                 universal_newlines=True,
                 cwd=task_working_dir
