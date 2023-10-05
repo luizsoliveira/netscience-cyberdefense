@@ -152,6 +152,7 @@ class NetScienceClient:
         try:
             with open(path, "w") as outfile:
                 outfile.write(json.dumps(task, indent=2))
+                outfile.close()
             return True
         except IOError:
             raise Exception("Failure while writing file: " + path)
