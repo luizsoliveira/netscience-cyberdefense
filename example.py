@@ -12,8 +12,9 @@ logging.basicConfig(
 
 
 #client = RIPEClient(cacheLocation='./cache/ripe', logging=logging)
-client = RIPEClient(cacheLocation='./cache/ripe', logging=False)
+#client = RIPEClient(cacheLocation='./cache/ripe', logging=False)
 
+client = RIPEClient()
 
 files = client.download_updates_interval_files(datetime(2022, 12, 25, 10, 0), datetime(2022, 12, 25, 11, 37))
 
