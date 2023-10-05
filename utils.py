@@ -7,6 +7,11 @@ def print_task_parameters(task):
         for param, value in task['parameters'].items():
             print("  → {:<30} {:<30}".format(param, value))
 
+def print_generic_parameters(params):
+        print("  → {:<30} {:<30}".format('Parameter','Value'))
+        for param, value in params.items():
+            print("  → {:<30} {:<30}".format(param, value))
+
 def zipdir(path, ziph):
     # ziph is zipfile handle
     for root, dirs, files in os.walk(path):
