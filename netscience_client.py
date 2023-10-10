@@ -89,7 +89,7 @@ class NetScienceClient:
         }
 
         data = {
-        "tasktype": task_type
+            "tasktype": task_type
         }
 
         # sending post request and saving response as response object
@@ -109,7 +109,7 @@ class NetScienceClient:
         else:
             return False
     
-    def update_task_finished(self, task):
+    def update_task_finished(self, task, return_code):
 
         self.check_authentication()
 
@@ -121,7 +121,8 @@ class NetScienceClient:
         }
 
         data = {
-            "finished_at": "now()"
+            "finished_at": "now()",
+            "return_code": return_code
         }
 
         # sending post request and saving response as response object
