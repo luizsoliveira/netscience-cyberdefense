@@ -48,13 +48,18 @@ class NetScienceClient:
             raise Exception('The logging parameters need to be a valid logging object or False')
         
     def do_auth(self):
+
+        headers= {
+            'Content-Profile': 'public'
+        }
+
         data = {
         "email": self.username,
         "pass": self.password
         }
 
         # sending post request and saving response as response object
-        r = requests.post(url=f"{self.base_url}/{self.API_AUTH_ENDPOINT}", data=data)
+        r = requests.post(url=f"{self.base_url}/{self.API_AUTH_ENDPOINT}", data=data, headers=headers)
         response_data = json.loads(r.text)
 
         if (r.status_code != 200):
@@ -79,12 +84,16 @@ class NetScienceClient:
 
         self.check_authentication()
 
+        headers = {
+            'Authorization': f"Bearer {self.token}"
+        }
+
         data = {
         "tasktype": task_type
         }
 
         # sending post request and saving response as response object
-        r = requests.post(url=f"{self.base_url}/{self.API_CATCH_TASK_ENDPOINT}", data=data)
+        r = requests.post(url=f"{self.base_url}/{self.API_CATCH_TASK_ENDPOINT}", data=data, headers=headers)
         response_data = json.loads(r.text)
 
         if (r.status_code != 200):
@@ -107,11 +116,12 @@ class NetScienceClient:
         headers= {
             'accept': 'application/json',
             'Prefer': 'return=representation',
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization': f"Bearer {self.token}"
         }
 
         data = {
-        "finished_at": "now()"
+            "finished_at": "now()"
         }
 
         # sending post request and saving response as response object
