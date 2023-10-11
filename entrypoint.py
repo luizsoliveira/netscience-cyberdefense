@@ -16,6 +16,9 @@ logging.basicConfig(
 
 #client = RIPEClient(cacheLocation='./cache/ripe', logging=logging)
 
+print(" ⏰ Waiting 10s due to time to PostgREST start")
+time.sleep(10)
+
 client = NetScienceClient(base_url='http://postgrest:3000', username='luizsoliveira@gmail.com', password='123456', logging=False)
 counter=0
 
